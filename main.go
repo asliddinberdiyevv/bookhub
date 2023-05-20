@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,11 +10,9 @@ import (
 
 func main() {
 	server := gin.New()
-
-	APP_PORT := os.Getenv("APP_PORT")
-	fmt.Println("---- APP ----")
-	fmt.Println("APP_PORT:", APP_PORT)
-	fmt.Println("")
+	flag.Parse()
+	logrus.SetLevel(logrus.DebugLevel)
+	logrus.WithField("port", os.Getenv("APP_PORT")).Debug("starting server")
 
 	if err := server.Run(":" + os.Getenv("APP_PORT")); err != nil {
 		logrus.WithError(err).Fatal("Error starting server")
