@@ -16,6 +16,7 @@ func main() {
 	logrus.WithField("port", os.Getenv("APP_PORT")).Debug("starting server")
 
 	server.GET("/", func(ctx *gin.Context) {
+		logrus.Info("get request")
 		ctx.JSON(http.StatusOK, gin.H{"message": "main server"})
 	})
 
