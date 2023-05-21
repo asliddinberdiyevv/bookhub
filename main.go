@@ -20,7 +20,7 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"message": "main server"})
 	})
 
-	if err := server.Run(":" + os.Getenv("APP_PORT")); err != nil {
+	if err := server.Run(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")); err != nil {
 		logrus.WithError(err).Fatal("Error starting server")
 	}
 }
