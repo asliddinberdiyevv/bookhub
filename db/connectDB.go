@@ -20,16 +20,15 @@ func ConnectDB() *sqlx.DB {
 
 	conn, err := sqlx.Open(db_driver, connStr)
 	if err != nil {
-		logrus.Fatalf("failed connecting to database error: %s", err.Error())
+		logrus.Fatalf("failed connecting to db error: %s", err.Error())
 		os.Exit(1)
 	}
 
 	conn.SetMaxOpenConns(32)
 
 	pingErr := conn.Ping()
-	logrus.Infof("db ping status: %v", pingErr)
 	if pingErr != nil {
-		logrus.Fatalf("failed connecting to db error: %s", pingErr.Error())
+		logrus.Fatalf("db ping status error: %s", pingErr.Error())
 		os.Exit(1)
 	}
 
