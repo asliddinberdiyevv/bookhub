@@ -2,6 +2,7 @@ version: '3'
 services:
   app:
     container_name: bookhub_app
+    hostname: app
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,7 +22,6 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - REDIS_DB=${REDIS_DB}
     restart: on-failure
     volumes:
       - app:/usr/src/app/
@@ -37,6 +37,7 @@ services:
   db: 
     image: postgres:14
     container_name: bookhub_db
+    hostname: db
     ports:
       - "5432:5432"
     environment:
@@ -53,12 +54,13 @@ services:
   pgadmin:
     image: dpage/pgadmin4:7.1
     container_name: bookhub_pgadmin
+    hostname: pgadmin
+    ports:
+      - "5050:5050"
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
       - PGADMIN_LISTEN_PORT=${PGADMIN_PORT}
-    ports:
-      - "5050:5050"
     volumes:
         - pgadmin:/var/lib/pgadmin
     depends_on:
@@ -70,14 +72,18 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis
+    image: bitnami/redis
     container_name: bookhub_redis
+    hostname: redis
     ports:
       - 6379:6379
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+        - db
+        - pgadmin
     networks:
       - network_service
     expose:

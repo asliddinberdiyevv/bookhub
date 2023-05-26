@@ -5,7 +5,7 @@ FROM golang:1.20-alpine as builder
 # Git is required for fetching the dependencies.
 RUN apk update
 RUN apk upgrade --update-cache --available
-RUN apk add git make curl perl bash build-base zlib-dev ucl-dev
+RUN apk add git make curl bash build-base 
 
 # Set the current working directory inside the container
 WORKDIR /app

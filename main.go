@@ -1,11 +1,12 @@
 package main
 
 import (
+	"bookhub/db"
 	"flag"
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,10 +16,11 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.WithField("port", os.Getenv("PORT")).Debug("starting server")
 
-	server.GET("/", func(ctx *gin.Context) {
-		logrus.Info("get request")
-		ctx.JSON(http.StatusOK, gin.H{"message": "main server"})
-	})
+	DB := db.ConnectDB()
+	defer DB.Close()
+
+	RS := db.ConnectRS()
+	defer RS.Close()
 
 	if err := server.Run(":" + os.Getenv("PORT")); err != nil {
 		logrus.WithError(err).Fatal("Error starting server")

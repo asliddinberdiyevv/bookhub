@@ -1,10 +1,10 @@
 .PHONY: build up down run stop logs
 
 run:
-	docker-compose up -d
+	docker-compose up -d 
 
 build:
-	docker-compose build
+	docker-compose build 
 
 logs:
 	docker-compose logs -f
