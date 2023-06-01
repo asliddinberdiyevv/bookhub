@@ -14,6 +14,10 @@ import (
 func main() {
 	server := gin.New()
 	flag.Parse()
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.WithField("port", os.Getenv("PORT")).Debug("starting server")
 

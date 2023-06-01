@@ -2,7 +2,6 @@ version: '3'
 services:
   app:
     container_name: bookhub_app
-    hostname: app
     build:
       context: .
       dockerfile: Dockerfile
@@ -53,7 +52,6 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:7.1
-    hostname: pgadmin
     container_name: bookhub_pgadmin
     ports:
       - "5050:5050"

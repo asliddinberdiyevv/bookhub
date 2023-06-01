@@ -20,8 +20,7 @@ func ConnectRS() *redis.Client {
 		DB:       0,
 	})
 
-	pong, err := client.Ping().Result()
-	logrus.Infof("redis ping status: %s", pong)
+	_, err := client.Ping().Result()
 	if err != nil {
 		logrus.Fatalf("failed connecting to redis db error: %s", err.Error())
 		os.Exit(1)

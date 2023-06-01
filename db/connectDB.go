@@ -18,18 +18,25 @@ func ConnectDB() *sqlx.DB {
 
 	connStr := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", db_driver, db_user, db_password, db_host, db_port, db_name)
 
-	conn, err := sqlx.Open(db_driver, connStr)
-	if err != nil {
-		logrus.Fatalf("failed connecting to db error: %s", err.Error())
+	conn, errConn := sqlx.Open(db_driver, connStr)
+	if errConn != nil {
+		logrus.Fatalf("failed connecting to db error: %s", errConn.Error())
 		os.Exit(1)
 	}
 
 	conn.SetMaxOpenConns(32)
 
-	pingErr := conn.Ping()
-	if pingErr != nil {
-		logrus.Fatalf("db ping status error: %s", pingErr.Error())
+	
+	if err := conn.Ping(); err != nil {
+		logrus.Fatalf("db ping status error: %s", err.Error())
 		os.Exit(1)
+	}
+
+	if err := migrateDB(conn.DB); err != nil {
+		logrus.Fatalf("could not migrate database error: %s", err.Error())
+		os.Exit(1)
+	} else {
+		logrus.Infof("successfully migrated to db")
 	}
 
 	logrus.Infof("successfully connected to db")

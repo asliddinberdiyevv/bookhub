@@ -4,6 +4,8 @@ FROM golang:1.20-alpine as builder
 # Install git.
 # Git is required for fetching the dependencies.
 RUN apk update
+RUN apk add -U tzdata
+RUN cp /usr/share/zoneinfo/Asia/Tashkent /etc/localtime
 RUN apk upgrade --update-cache --available
 RUN apk add git make curl bash build-base 
 
@@ -31,6 +33,7 @@ WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage. Observe we also copied the .env file
 COPY --from=builder /app/main .
+COPY --from=builder /app/db/migrations ./migrations/
 
 # Expose port 8000 to the outside world
 EXPOSE 8000
